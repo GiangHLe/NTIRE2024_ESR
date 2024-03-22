@@ -244,9 +244,7 @@ class EMaxGMan(nn.Module):
 	"""                                                                         
 																				
 	def __init__(self, in_channels = 3, out_channels = 3, feature_channels = 64, upscale = 4):
-		super(EMaxGMan, self).__init__()                                         
-																				
-		# for now remove mean shift add/sub                                     
+		super(EMaxGMan, self).__init__()                                                                              
 		self.conv_in = conv_layer(in_channels, feature_channels, kernel_size = 3)
 		self.multi_head = MultiHead(feature_channels, feature_channels)         
 		self.block_1 = ERLFB(feature_channels,feature_channels)
@@ -262,8 +260,6 @@ class EMaxGMan(nn.Module):
 												  upscale_factor=upscale)														
 																				
 	def forward(self, x):                                                       
-																				
-		# need to check with and without activation.                            
 		expanded_feature = self.conv_in(x)                                      
 		out_head = self.multi_head(expanded_feature)
 		out_b1 = self.block_1(out_head)
