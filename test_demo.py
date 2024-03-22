@@ -31,6 +31,21 @@ def select_model(args, device):
     # elif model_id == 1:
     #     from models.team[Your_Team_ID]_[Model_Name] import [Model_Name]
     #     ...
+    if model_id == 15:
+        # Baseline: Winner of the NTIRE 2022 Efficient SR Challenge 
+        # RLFN: Residual Local Feature Network for Efficient Super-Resolution
+        # arXiv: https://arxiv.org/pdf/2205.07514.pdf
+        # Original Code: https://github.com/bytedance/RLFN
+        # Ckpts: rlfn_ntire_x4.pth
+        from models.team15_EMaxGMan import EMaxGMan
+        name, data_range = f"{model_id:02}_EMaxGMan", 1.0
+        model_path = os.path.join('model_zoo', 'team15_EMaxGMan.pth')
+        model = EMaxGMan()
+        model.load_state_dict(torch.load(model_path), strict=True)
+
+    # elif model_id == 1:
+    #     from models.team[Your_Team_ID]_[Model_Name] import [Model_Name]
+    #     ...
     else:
         raise NotImplementedError(f"Model {model_id} is not implemented.")
 
@@ -50,7 +65,8 @@ def select_dataset(data_dir, mode):
             (
                 p.replace("_HR", "_LR").replace(".png", "x4.png"),
                 p
-            ) for p in sorted(glob.glob(os.path.join(data_dir, "LSDIR_DIV2K_test_HR/*.png")))
+            # ) for p in sorted(glob.glob(os.path.join(data_dir, "LSDIR_DIV2K_test_HR/*.png")))
+            ) for p in sorted(glob.glob(os.path.join(data_dir, "DIV2K_LSDIR_test_HR/*.png"))) # fix the name here
         ]
 
     # inference on the LSDIR_DIV2K_valid set
@@ -59,7 +75,8 @@ def select_dataset(data_dir, mode):
             (
                 p.replace("_HR", "_LR").replace(".png", "x4.png"),
                 p
-            ) for p in sorted(glob.glob(os.path.join(data_dir, "LSDIR_DIV2K_valid_HR/*.png")))
+            # ) for p in sorted(glob.glob(os.path.join(data_dir, "LSDIR_DIV2K_valid_HR/*.png")))
+            ) for p in sorted(glob.glob(os.path.join(data_dir, "DIV2K_LSDIR_valid_HR/*.png"))) # fix the name here
         ]
     else:
         raise NotImplementedError(f"{mode} is not implemented in select_dataset")
